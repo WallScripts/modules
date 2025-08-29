@@ -28,7 +28,7 @@ end
 local function GetHealthColor(health)
     if health > 75 then
         return CurrentConfig.HealthColors.High
-    elseif health > 50 then
+    elseif health > 25 then
         return CurrentConfig.HealthColors.Medium
     else
         return CurrentConfig.HealthColors.Low
