@@ -159,7 +159,7 @@ FlashbackGui.Name = RandomString()
 FlashbackGui.Parent = CoreGui
 FlashbackGui.ResetOnSpawn = false
 FlashbackGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-FlashbackGui.Visible = false
+FlashbackGui.Enabled = false
 
 local Frame = Instance.new("Frame")
 Frame.Name = RandomString()
@@ -201,9 +201,9 @@ function Flashback.Toggle(State)
             RenderStepName = RandomString()
             RunService:BindToRenderStep(RenderStepName, 1, Step)
         end
-        FlashbackGui.Enabled = true
+        FlashbackGui.Visible = true
     else
-        FlashbackGui.Enabled = false
+        FlashbackGui.Visible = false
     end
 end
 
