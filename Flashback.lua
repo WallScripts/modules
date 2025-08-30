@@ -203,7 +203,7 @@ function Flashback.Toggle(State)
         end
         FlashbackGui.Enabled = true
     else
-        FlashbackGui.Enabled= false
+        FlashbackGui.Enabled = false
     end
 end
 
