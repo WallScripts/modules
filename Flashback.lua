@@ -7,7 +7,7 @@ local cloneref = cloneref or function(Instance) return Instance end
 local Players = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
 local UserInputService = cloneref(game:GetService("UserInputService"))
-local CoreGui = cloneref(game:GetService("CoreGui")
+local CoreGui = cloneref(game:GetService("CoreGui"))
 
 local LocalPlayer = Players.LocalPlayer
 local Frames = {}
@@ -154,62 +154,56 @@ local function Step()
     end)
 end
 
-local function CreateFlashbackGUI()
-    FlashbackGui = Instance.new("ScreenGui")
-    FlashbackGui.Name = RandomString()
-    FlashbackGui.Parent = CoreGui
-    FlashbackGui.ResetOnSpawn = false
-    FlashbackGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
-    local Frame = Instance.new("Frame")
-    Frame.Name = RandomString()
-    Frame.Size = UDim2.new(0, 120, 0, 40)
-    Frame.Position = UDim2.new(0.5, -60, 0.3, 0)
-    Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    Frame.BorderSizePixel = 0
-    Frame.Parent = FlashbackGui
-    Frame.ZIndex = 10000
-    
-    CreateCorner(Frame, 6)
-    
-    local UIStroke = Instance.new("UIStroke")
-    UIStroke.Thickness = 2
-    UIStroke.Color = Color3.fromRGB(50, 50, 50)
-    UIStroke.Parent = Frame
-    
-    local FlashbackButton = Instance.new("TextLabel")
-    FlashbackButton.Name = RandomString()
-    FlashbackButton.Size = UDim2.new(1, 0, 1, 0)
-    FlashbackButton.Position = UDim2.new(0, 0, 0, 0)
-    FlashbackButton.BackgroundTransparency = 1
-    FlashbackButton.Text = "Flashback"
-    FlashbackButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    FlashbackButton.Font = Enum.Font.Gotham
-    FlashbackButton.TextSize = 14
-    FlashbackButton.ZIndex = 10001
-    FlashbackButton.Parent = Frame
-    
-    HandleDrag(Frame, function()
-        FlashbackSystem.Active = not FlashbackSystem.Active
-        FlashbackButton.Text = FlashbackSystem.Active and "Stop" or "Flashback"
-        FlashbackButton.TextColor3 = FlashbackSystem.Active and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
-    end)
-end
+FlashbackGui = Instance.new("ScreenGui")
+FlashbackGui.Name = RandomString()
+FlashbackGui.Parent = CoreGui
+FlashbackGui.ResetOnSpawn = false
+FlashbackGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+FlashbackGui.Visible = false
+
+local Frame = Instance.new("Frame")
+Frame.Name = RandomString()
+Frame.Size = UDim2.new(0, 120, 0, 40)
+Frame.Position = UDim2.new(0.5, -60, 0.3, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.BorderSizePixel = 0
+Frame.Parent = FlashbackGui
+Frame.ZIndex = 10000
+
+CreateCorner(Frame, 6)
+
+local UIStroke = Instance.new("UIStroke")
+UIStroke.Thickness = 2
+UIStroke.Color = Color3.fromRGB(50, 50, 50)
+UIStroke.Parent = Frame
+
+local FlashbackButton = Instance.new("TextLabel")
+FlashbackButton.Name = RandomString()
+FlashbackButton.Size = UDim2.new(1, 0, 1, 0)
+FlashbackButton.Position = UDim2.new(0, 0, 0, 0)
+FlashbackButton.BackgroundTransparency = 1
+FlashbackButton.Text = "Flashback"
+FlashbackButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlashbackButton.Font = Enum.Font.Gotham
+FlashbackButton.TextSize = 14
+FlashbackButton.ZIndex = 10001
+FlashbackButton.Parent = Frame
+
+HandleDrag(Frame, function()
+    FlashbackSystem.Active = not FlashbackSystem.Active
+    FlashbackButton.Text = FlashbackSystem.Active and "Stop" or "Flashback"
+    FlashbackButton.TextColor3 = FlashbackSystem.Active and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(255, 255, 255)
+end)
 
 function Flashback.Toggle(State)
     if State then
-        if not FlashbackGui then
-            CreateFlashbackGUI()
+        if not RenderStepName then
             RenderStepName = RandomString()
             RunService:BindToRenderStep(RenderStepName, 1, Step)
         end
-        if FlashbackGui then
-            FlashbackGui.Enabled = true
-        end
+        FlashbackGui.Visible = true
     else
-        if FlashbackGui then
-            FlashbackGui.Enabled = false
-        end
+        FlashbackGui.Visible = false
     end
 end
 
