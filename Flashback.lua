@@ -201,9 +201,9 @@ function Flashback.Toggle(State)
             RenderStepName = RandomString()
             RunService:BindToRenderStep(RenderStepName, 1, Step)
         end
-        FlashbackGui.Visible = true
+        FlashbackGui.Enabled = true
     else
-        FlashbackGui.Visible = false
+        FlashbackGui.Enabled= false
     end
 end
 
