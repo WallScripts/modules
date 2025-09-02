@@ -9,7 +9,7 @@ Player = Players.LocalPlayer
 
 ActiveESP = {}
 ESPEnabled = false
-ESPConnection = nil
+PlayerConnections = {}
 CurrentConfig = nil
 
 local function IsPlayerFriend(character)
@@ -234,11 +234,15 @@ end
 local function SetupPlayer(player)
     if player == Player then return end
     
+    if PlayerConnections[player] then
+        PlayerConnections[player]:Disconnect()
+    end
+    
     if player.Character then
         CreateESP(player.Character)
     end
     
-    player.CharacterAdded:Connect(function(character)
+    PlayerConnections[player] = player.CharacterAdded:Connect(function(character)
         task.wait(0.1)
         if ESPEnabled then
             CreateESP(character)
@@ -255,18 +259,22 @@ local function Esp(State, Config)
             SetupPlayer(player)
         end
         
-        ESPConnection = Players.PlayerAdded:Connect(SetupPlayer)
+        Players.PlayerAdded:Connect(SetupPlayer)
         
         Players.PlayerRemoving:Connect(function(player)
+            if PlayerConnections[player] then
+                PlayerConnections[player]:Disconnect()
+                PlayerConnections[player] = nil
+            end
             if player.Character and ActiveESP[player.Character] then
                 RemoveESP(player.Character)
             end
         end)
     else
-        if ESPConnection then
-            ESPConnection:Disconnect()
-            ESPConnection = nil
+        for player, connection in pairs(PlayerConnections) do
+            connection:Disconnect()
         end
+        PlayerConnections = {}
         
         for character, _ in pairs(ActiveESP) do
             RemoveESP(character)
