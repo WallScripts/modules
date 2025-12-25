@@ -1,13 +1,24 @@
 local Notification = {}
 
-local cloneref = cloneref or function(Instance)
-    return Instance
+local Services = setmetatable({}, {
+    __index = function(Self, ServiceName)
+        local CloneReference = cloneref and type(cloneref) == "function" and cloneref or function(Value) return Value end
+        local Success, Service = pcall(function() return CloneReference(game:GetService(ServiceName)) end)
+        if Success and Service then
+            rawset(Self, ServiceName, Service)
+            return Service
+        end
+    end
+})
+
+local function GetService(ServiceName)
+    return Services[ServiceName]
 end
 
-local Players = cloneref(game:GetService("Players"))
-local TweenService = cloneref(game:GetService("TweenService"))
-local TextService = cloneref(game:GetService("TextService"))
-local CoreGui = cloneref(game:GetService("CoreGui"))
+local Players = GetService("Players")
+local TweenService = GetService("TweenService")
+local TextService = GetService("TextService")
+local CoreGui = GetService("CoreGui")
 
 local function RandomString()
     local Length = math.random(10,20)
@@ -47,19 +58,21 @@ local function CalculateNotificationTextHeight(Text, TextSize, Font, MaxWidth)
 end
 
 local function CreateNotificationCloseButton(Parent)
-    local CloseButton = Instance.new("ImageButton")
+    local CloseButton = Instance.new("TextButton")
     CloseButton.Name = RandomString()
     CloseButton.Parent = Parent
     CloseButton.Size = UDim2.new(0, 20, 0, 20)
     CloseButton.Position = UDim2.new(1, -30, 0, 10)
     CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     CloseButton.BorderSizePixel = 0
-    CloseButton.Image = "rbxassetid://7743878857"
-    CloseButton.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    CloseButton.Text = "x"
+    CloseButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    CloseButton.TextScaled = true
+    CloseButton.Font = Enum.Font.GothamBold
     CloseButton.ZIndex = 15003
-    
+
     CreateCorner(CloseButton, 5)
-    
+
     return CloseButton
 end
 
